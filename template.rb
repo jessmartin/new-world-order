@@ -7,7 +7,6 @@ end
 
 git :init
 append_file '.gitignore', "vendor/bundler_gems\nconfig/database.yml\n"
-run "cp config/database.yml config/database.example.yml"
 git :add => "."
 git :commit => "-a -m 'Initial commit'"
 
@@ -144,6 +143,7 @@ git :add => "."
 git :commit => "-a -m 'Rspec generated'"
 
 rvm_run "./script/rails generate cucumber:install --rspec --capybara"
+run "cp config/database.yml config/database.example.yml"
 git :add => "."
 git :commit => "-a -m 'Cucumber generated'"
 
