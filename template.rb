@@ -30,35 +30,17 @@ file 'README.markdown', <<-EOL
 
 ## Seed Data
 
+## For sass2css run:
+    
+    sass --watch public/stylesheets/bassline:public/stylesheets/screen.css
+
 Login as ....  # TODO insert typical test accounts for QA / devs to login to app as
 EOL
 
-file 'public/stylesheets/screen.css', <<-CODE
-/*========================================================
-	RESET HERE
-========================================================*/
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, font, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td {margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; vertical-align: baseline; background: transparent;}
-body {line-height: 1;}
-ol, ul {list-style: none;}
-blockquote, q {quotes: none;}
-blockquote:before, blockquote:after, q:before, q:after {content: ''; content: none;}
-/* remember to define focus styles! */
-:focus {outline: 0;}
-/* remember to highlight inserts somehow! */
-ins {text-decoration: none;}
-del {text-decoration: line-through;}
-/* tables still need 'cellspacing="0"' in the markup */
-table {border-collapse: collapse; border-spacing: 0;}
-
-CODE
+# clone bassline sass/css into public
+run "git clone git@github.com:michaelparenteau/bassline.git public/stylesheets/bassline"
+run "rm -rf public/stylesheets/bassline/.git"
+run "rm -rf public/stylesheets/bassline/.gitignore"
 
 # remove Prototype defaults
 run "rm public/javascripts/controls.js"
@@ -78,7 +60,7 @@ commit_message =<<EOC
 Remove defaults; add preferred JS and CSS:
 
   - replace Protoype with jquery & jquery-ui minified versions
-  - add a simple CSS reset
+  - add bassline sass/css
   - add a README template to help devs get quick started
 EOC
 git :add => "."
@@ -95,6 +77,7 @@ file 'Gemfile', <<-CODE
 source "http://rubygems.org"
 
 gem "rails", "3.0.4"
+gem "haml"
 CODE
 
 gem gem_for_database unless options[:skip_activerecord]
@@ -102,7 +85,6 @@ gem gem_for_database unless options[:skip_activerecord]
 append_file 'Gemfile', <<-CODE
 
 group "development", "test" do
-  gem "unicorn"
   gem "rspec", "~> 2.0"
   gem "rspec-rails", "~> 2.0"
 end
