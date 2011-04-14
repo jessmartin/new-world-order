@@ -32,7 +32,7 @@ file 'README.markdown', <<-EOL
 
 ## For sass2css run:
     
-    sass --watch public/stylesheets/bassline:public/stylesheets/screen.css
+    sass --watch public/stylesheets/bassline:public/stylesheets
 
 Login as ....  # TODO insert typical test accounts for QA / devs to login to app as
 EOL
