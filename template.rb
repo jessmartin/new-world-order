@@ -42,12 +42,6 @@ run "git clone git@github.com:michaelparenteau/bassline.git public/stylesheets/b
 run "rm -rf public/stylesheets/bassline/.git"
 run "rm -rf public/stylesheets/bassline/.gitignore"
 
-# remove Prototype defaults
-run "rm public/javascripts/controls.js"
-run "rm public/javascripts/dragdrop.js"
-run "rm public/javascripts/effects.js"
-run "rm public/javascripts/prototype.js"
-
 open("http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js") do |source|
   File.open("public/javascripts/jquery-1.4.2.min.js", 'w') {|f| f.write(source.read) }
 end
@@ -56,12 +50,34 @@ open("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js") do 
   File.open("public/javascripts/jquery-ui-1.8.1.min.js", 'w') {|f| f.write(source.read) }
 end
 
+open("https://github.com/rails/jquery-ujs/raw/master/src/rails.js") do |source|
+  File.open("public/javascripts/rails.js", "w") {|f| f.write(source.read) }
+end
+
+gsub_file "config/application.rb", /javascript_expansions\[:defaults\] = %w\(/ do |match|
+  match << "jquery-1.4.2.min jquery-ui-1.8.1.min rails"
+end
+
+run "rm -rf app/views/layouts/application.html.erb"
+file 'app/views/layouts/application.html.haml', <<EOC
+!!!
+%html
+  %head
+    %title AppWithHaml
+  = stylesheet_link_tag :all
+  = javascript_include_tag :defaults
+  = csrf_meta_tag
+%body
+  = yield
+EOC
+
 commit_message =<<EOC
-Remove defaults; add preferred JS and CSS:
+Remove defaults; add preferred JS and CSS; add haml:
 
   - replace Protoype with jquery & jquery-ui minified versions
   - add bassline sass/css
   - add a README template to help devs get quick started
+  - replace base erb layout with haml layout
 EOC
 git :add => "."
 git :commit => "-m '#{commit_message}'"

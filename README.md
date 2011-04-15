@@ -19,15 +19,17 @@ First, clone new-world-order locally:
 
 Then, generate your new application using the template file:
 
-    rails new my-app -m new-world-order/template.rb
+    rails new my-app -J -m new-world-order/template.rb
 
 To use your database of choice, use the built in `-d` switch to the `rails` command.  New World Order's generated Gemfile will properly respect your database of choice.  For Postgres, we reach into your database.yml and make the username `postgres` (instead of your application name, which the Rails generator does by default).
 
     rails new my-postgres-app -d postgresql -m new-world-order/template.rb
 
+Make sure to script javascripts using the -J command. This works in Rails 3.0 and later. When Rails 3.1 comes out, jQuery will be configured by default and the -J flag will not be necessary.
+
 NOTE: You _can_ give the rails command a URL for the template, but due to changes in how
 Github requires SSL for all urls, and how Net::HTTP verifies SSL in Ruby
-1.9+, you now need to clone the template locally first.  Youc an see the
+1.9+, you now need to clone the template locally first.  You can see the
 issue here for more info: 
 
   https://github.com/relevance/new-world-order/issues#issue/5
