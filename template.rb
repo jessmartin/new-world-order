@@ -63,7 +63,7 @@ file 'app/views/layouts/application.html.haml', <<EOC
 !!!
 %html
   %head
-    %title AppWithHaml
+    %title #{app_name}
   = stylesheet_link_tag :all
   = javascript_include_tag :defaults
   = csrf_meta_tag
@@ -92,7 +92,7 @@ end
 file 'Gemfile', <<-CODE
 source "http://rubygems.org"
 
-gem "rails", "3.0.5"
+gem "rails", "3.0.6"
 gem "haml"
 CODE
 
