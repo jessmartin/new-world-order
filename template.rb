@@ -42,8 +42,8 @@ run "git clone git@github.com:michaelparenteau/bassline.git public/stylesheets/b
 run "rm -rf public/stylesheets/bassline/.git"
 run "rm -rf public/stylesheets/bassline/.gitignore"
 
-open("http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js") do |source|
-  File.open("public/javascripts/jquery-1.4.2.min.js", 'w') {|f| f.write(source.read) }
+open("http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js") do |source|
+  File.open("public/javascripts/jquery-1.5.2.min.js", 'w') {|f| f.write(source.read) }
 end
 
 open("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js") do |source|
@@ -55,7 +55,7 @@ open("https://github.com/rails/jquery-ujs/raw/master/src/rails.js") do |source|
 end
 
 gsub_file "config/application.rb", /javascript_expansions\[:defaults\] = %w\(/ do |match|
-  match << "jquery-1.4.2.min jquery-ui-1.8.1.min rails"
+  match << "jquery-1.5.2.min jquery-ui-1.8.1.min rails"
 end
 
 run "rm -rf app/views/layouts/application.html.erb"
