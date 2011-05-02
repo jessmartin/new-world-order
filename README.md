@@ -5,7 +5,6 @@ Rails 3 [Relevance][rel] Style.  This means the following:
 
 * HAML and SASS for your view layer
 * Rspec 2 for specs, with focused specs configured out of the box
-* Cucumber for user level testing
 * JQuery/JQuery-UI for javascript - Protoype/Scriptaculous removed
 * Factory Girl for test data
 * Mocha installed and configured for mocking inside RSpec

@@ -101,17 +101,15 @@ gem gem_for_database unless options[:skip_activerecord]
 append_file 'Gemfile', <<-CODE
 
 group "development", "test" do
-  gem "rspec", "~> 2.0"
-  gem "rspec-rails", "~> 2.0"
+  gem "rspec", "~> 2.5"
+  gem "rspec-rails", "~> 2.5"
 end
 
 group "test" do
   gem "database_cleaner"
   gem "capybara"
-  gem "cucumber-rails", "0.3.2"
   gem "factory_girl_rails", "1.0", :require => nil
   gem "mocha"
-  gem "test-unit"
 end
 CODE
 
@@ -140,10 +138,9 @@ inject_into_file "spec/spec_helper.rb", rspec_config, :after => /Rspec.configure
 git :add => "."
 git :commit => "-a -m 'Rspec generated'"
 
-rvm_run "./script/rails generate cucumber:install --rspec --capybara"
 run "cp config/database.yml config/database.example.yml"
 git :add => "."
-git :commit => "-a -m 'Cucumber generated'"
+git :commit => "-a -m 'Added example database.yml'"
 
 rvm_run "rake db:create:all db:migrate"
 
