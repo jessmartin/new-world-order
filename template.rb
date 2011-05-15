@@ -67,8 +67,8 @@ file 'app/views/layouts/application.html.haml', <<EOC
   = stylesheet_link_tag :all
   = javascript_include_tag :defaults
   = csrf_meta_tag
-%body
-  = yield
+  %body
+    = yield
 EOC
 
 commit_message =<<EOC
