@@ -1,4 +1,4 @@
-RVM_RUBY = "ruby-1.9.2"
+RVM_RUBY = "ruby-1.9.2-p290"
 RVM_GEMSET = app_name
 
 def rvm_run(command, config = {})
@@ -6,78 +6,45 @@ def rvm_run(command, config = {})
 end
 
 git :init
-append_file '.gitignore', "vendor/bundler_gems\nconfig/database.yml\n"
+append_file ".gitignore", "config/database.yml\n"
 git :add => "."
 git :commit => "-a -m 'Initial commit'"
 
-%W[Gemfile README doc/README_FOR_APP public/index.html public/images/rails.png].each do |path|
-  run "rm #{path}"
-end
+run 'rm README'
+run 'rm doc/README_FOR_APP'
+run 'rm public/index.html'
+run 'rm public/favicon.ico'
+run 'rm -rf test'
+run 'rm Gemfile'
+run 'rm app/assets/images/rails.png'
 
-run "rm -rf test"
-
-file 'README.markdown', <<-EOL
-# Welcome to #{app_name}
-
-## Summary
-
-#{app_name} is a .... TODO high level summary of app
+create_file 'README.markdown', <<-EOL
+# #{app_name}
 
 ## Getting Started
 
     gem install bundler
     # TODO other setup commands here
-
-## Seed Data
-
-## For sass2css run:
-    
-    sass --watch public/stylesheets/bassline:public/stylesheets
-
-Login as ....  # TODO insert typical test accounts for QA / devs to login to app as
 EOL
 
-# clone bassline sass/css into public
-run "git clone git@github.com:michaelparenteau/bassline.git app/assets/stylesheets/bassline"
-run "rm -rf public/stylesheets/bassline/.git"
-run "rm -rf public/stylesheets/bassline/.gitignore"
-
-open("http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js") do |source|
-  File.open("app/assets/javascripts/jquery-1.5.2.min.js", 'w') {|f| f.write(source.read) }
-end
-
-open("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js") do |source|
-  File.open("app/assets/javascripts/jquery-ui-1.8.1.min.js", 'w') {|f| f.write(source.read) }
-end
-
-open("https://github.com/rails/jquery-ujs/raw/master/src/rails.js") do |source|
-  File.open("app/assets/javascripts/rails.js", "w") {|f| f.write(source.read) }
-end
-
-# gsub_file "config/application.rb", /javascript_expansions\[:defaults\] = %w\(/ do |match|
-#   match << "jquery-1.5.2.min jquery-ui-1.8.1.min rails"
-# end
-
 run "rm -rf app/views/layouts/application.html.erb"
-file 'app/views/layouts/application.html.haml', <<EOC
+create_file 'app/views/layouts/application.html.haml', <<EOC
 !!!
 %html
   %head
     %title #{app_name}
-  = stylesheet_link_tag :all
-  = javascript_include_tag :defaults
+  = stylesheet_link_tag :application
+  = javascript_include_tag :application
   = csrf_meta_tag
   %body
     = yield
 EOC
 
 commit_message =<<EOC
-Remove defaults; add preferred JS and CSS; add haml:
+Remove Rails default files:
 
-  - replace Protoype with jquery & jquery-ui minified versions
-  - add bassline sass/css
-  - add a README template to help devs get quick started
-  - replace base erb layout with haml layout
+  - Add a README template to help devs get started
+  - Replace base erb layout with haml layout
 EOC
 git :add => "."
 git :commit => "-m '#{commit_message}'"
@@ -89,59 +56,87 @@ if options[:database] == "postgresql"
   git :commit => "-a -m 'Use postgres user for database.yml'"
 end
 
-file 'Gemfile', <<-CODE
-source "http://rubygems.org"
+run 'cp config/database.yml config/database.example.yml' unless options[:skip_activerecord]
 
-gem "rails"
-gem "haml"
+git :commit => "-a -m 'Create a database.example.yml'"
+
+create_file 'Gemfile', <<-CODE
+source :rubygems
+
+gem 'rails', '3.1.1'
 CODE
 
 gem gem_for_database unless options[:skip_activerecord]
 
 append_file 'Gemfile', <<-CODE
+gem 'haml', '3.1.3'
+gem 'configatron', '2.8.3'
+gem 'airbrake', '~> 3.0.4'
+gem 'factory_girl_rails', '1.2.0'
+gem 'jquery-rails', '1.0.14'
 
-group "development", "test" do
-  gem "rspec", "~> 2.5"
-  gem "rspec-rails", "~> 2.5"
+# Gems used only for assets and not required
+# in production environments by default.
+group "assets" do
+  gem 'sass-rails',   '~> 3.1.4'
+  gem 'coffee-rails', '~> 3.1.1'
+  gem 'uglifier', '>= 1.0.3'
 end
 
-group "test" do
-  gem "database_cleaner"
-  gem "capybara"
-  gem "factory_girl_rails", "1.0", :require => nil
-  gem "mocha"
+group "development" do
+  gem 'pry'
+end
+
+group "development", "test" do
+  gem 'capybara', '~> 1.1.1'
+  gem 'selenium-webdriver', '~> 2.5.0'
+  gem 'rspec-rails', '~> 2.6.0'
+  gem 'mocha', '~> 0.9.12'
+  gem 'guard-rspec',    '~> 0.5.0', :require => false
+  gem 'guard-cucumber', '~> 0.7.2', :require => false
+  gem 'growl',          '~> 1.0.3', :require => false
+  gem 'rb-fsevent',     '~> 0.4.2', :require => false
+  gem 'cucumber-rails', '~> 1.1.1'
 end
 CODE
 
-file ".rvmrc", "rvm use #{RVM_RUBY}@#{RVM_GEMSET}\n"
+create_file ".rvmrc", "rvm #{RVM_RUBY}@#{RVM_GEMSET}"
 
 run "rvm #{RVM_RUBY} gemset create #{RVM_GEMSET}"
 rvm_run "gem install bundler"
 rvm_run "bundle install"
 git :add => "."
-git :commit => "-a -m  'Initial gems setup'"
+git :commit => "-a -m  'Set up initial gems'"
+
+rvm_run "rake db:create:all db:migrate"
+git :add => "."
+git :commit => "-a -m  'Create local database schema'"
 
 rvm_run "./script/rails generate rspec:install"
-gsub_file 'spec/spec_helper.rb', "# config.mock_with :mocha", "config.mock_with :mocha"
-gsub_file 'spec/spec_helper.rb', "config.mock_with :rspec", "# config.mock_with :rspec"
-rspec_config =<<-CODE
-  # Configure RSpec to run focused specs, and also respect the alias 'fit' for focused specs
+run "rm -rf spec"
+create_file 'spec/spec_helper.rb', <<-CODE
+ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path("../../config/environment", __FILE__)
+require 'rspec/rails'
+
+Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+
+RSpec.configure do |config|
+  config.mock_with :mocha
   config.filter_run :focused => true
   config.run_all_when_everything_filtered = true
   config.alias_example_to :fit, :focused => true
-  # Turn color on if we are NOT inside Textmate, Emacs, or VIM
-  config.color_enabled = ENV.keys.none? { |k| k.include?("TM_MODE", "EMACS", "VIM") }
+  config.alias_example_to :xit, :disabled => true
+  config.color_enabled = true
+end
 CODE
 
-inject_into_file "spec/spec_helper.rb", rspec_config, :after => /Rspec.configure.*$/
-
 git :add => "."
-git :commit => "-a -m 'Rspec generated'"
+git :commit => "-a -m  'Install rspec'"
 
-run "cp config/database.yml config/database.example.yml"
-git :add => "."
-git :commit => "-a -m 'Added example database.yml'"
+append_file 'Rakefile', <<-CODE
+Rake::Task[:default].clear
+task :default => [:spec]
+CODE
 
-rvm_run "rake db:create:all db:migrate"
-
-say "All done!  Thanks for installing using the NEW WORLD ORDER"
+git :commit => "-a -m  'Set up default rake task'"
