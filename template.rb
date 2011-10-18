@@ -1,4 +1,4 @@
-RVM_RUBY = "ruby-1.9.2-p290"
+RVM_RUBY = "ruby-1.9.3"
 RVM_GEMSET = app_name
 
 def rvm_run(command, config = {})
