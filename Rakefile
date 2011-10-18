@@ -12,4 +12,4 @@ task :test_postgres do
   system "rails new tmp/pg-test -d postgresql -m template.rb"
 end
 
-task :default => :test
+task :default => [:clean, :test]
