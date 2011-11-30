@@ -3,7 +3,7 @@ NEW WORLD ORDER
 
 Rails 3 [Relevance][rel] Style.  This means the following:
 
-* HAML and SASS for your view layer
+* HAML and SCSS for your view layer
 * Rspec 2 for specs, with focused specs configured out of the box
 * Factory Girl for test data
 * Mocha installed and configured for mocking inside RSpec
@@ -29,6 +29,12 @@ Github requires SSL for all urls, and how Net::HTTP verifies SSL in Ruby
 issue here for more info: 
 
   https://github.com/relevance/new-world-order/issues#issue/5
+
+Caveats
+-------
+
+Ruby 1.9.3 still has some issues, so you may want to downgrade to the
+latest Ruby 1.9.2, especially if you are on Passenger.
 
 Feedback and Other Items
 ------------------------
