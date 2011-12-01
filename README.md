@@ -34,7 +34,8 @@ Caveats
 -------
 
 Ruby 1.9.3 still has some issues, so you may want to downgrade to the
-latest Ruby 1.9.2, especially if you are on Passenger.
+latest Ruby 1.9.2, especially if you are on Passenger.  Passenger 3.0.10
+_should_ fix the issue - see the details here: http://code.google.com/p/phusion-passenger/issues/detail?id=714
 
 Feedback and Other Items
 ------------------------
