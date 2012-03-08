@@ -63,23 +63,24 @@ git :commit => "-a -m 'Create a database.example.yml'"
 create_file 'Gemfile', <<-CODE
 source :rubygems
 
-gem 'rails', '3.1.1'
+gem 'rails', '3.2.2'
 CODE
 
 gem gem_for_database unless options[:skip_activerecord]
 
 append_file 'Gemfile', <<-CODE
-gem 'haml', '3.1.3'
-gem 'configatron', '2.8.3'
-gem 'airbrake', '~> 3.0.4'
-gem 'factory_girl_rails', '1.2.0'
-gem 'jquery-rails', '1.0.14'
+\n
+gem 'haml', '3.1.4'
+gem 'configatron', '2.9.0'
+gem 'airbrake', '~> 3.0.9'
+gem 'factory_girl_rails', '1.7.0'
+gem 'jquery-rails', '2.0.1'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group "assets" do
-  gem 'sass-rails',   '~> 3.1.4'
-  gem 'coffee-rails', '~> 3.1.1'
+  gem 'sass-rails',   '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -90,13 +91,13 @@ end
 group "development", "test" do
   gem 'capybara', '~> 1.1.1'
   gem 'selenium-webdriver', '~> 2.5.0'
-  gem 'rspec-rails', '~> 2.6.0'
-  gem 'mocha', '~> 0.9.12'
-  gem 'guard-rspec',    '~> 0.5.0', :require => false
-  gem 'guard-cucumber', '~> 0.7.2', :require => false
+  gem 'rspec-rails', '~> 2.8.1'
+  gem 'mocha', '~> 0.10.5'
+  gem 'guard-rspec',    '~> 0.6.0', :require => false
+  gem 'guard-cucumber', '~> 0.7.5', :require => false
   gem 'growl',          '~> 1.0.3', :require => false
-  gem 'rb-fsevent',     '~> 0.4.2', :require => false
-  gem 'cucumber-rails', '~> 1.1.1'
+  gem 'rb-fsevent',     '~> 0.9.0', :require => false
+  gem 'cucumber-rails', '~> 1.3.0', :require => false
 end
 CODE
 
