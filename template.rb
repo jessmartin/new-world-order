@@ -10,7 +10,7 @@ append_file ".gitignore", "config/database.yml\n"
 git :add => "."
 git :commit => "-a -m 'Initial commit'"
 
-run 'rm README'
+run 'rm README*'
 run 'rm doc/README_FOR_APP'
 run 'rm public/index.html'
 run 'rm public/favicon.ico'
