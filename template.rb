@@ -140,3 +140,19 @@ task :default => [:spec]
 CODE
 
 git :commit => "-a -m  'Set up default rake task'"
+
+create_file 'config/initializers/pry.rb', <<-CODE
+#{app_name.humanize.titleize.gsub(/ /, '')}::Application.configure do
+  # Use Pry instead of IRB
+  silence_warnings do
+    begin
+      require 'pry'
+      IRB = Pry
+    rescue LoadError
+    end
+  end
+end
+CODE
+
+git :add => "."
+git :commit => "-a -m  'Set up pry for rails console'"
