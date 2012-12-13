@@ -90,12 +90,12 @@ end
 
 group "development", "test" do
   gem 'rspec-rails', '~> 2.12.0'
-  gem 'mocha', '~> 0.13.1'
-  gem 'guard-rspec',    '~> 2.3.1', :require => false
-  gem 'guard-cucumber', '~> 1.2.2', :require => false
-  gem 'growl',          '~> 1.0.3', :require => false
-  gem 'rb-fsevent',     '~> 0.9.2', :require => false
-  gem 'cucumber-rails', '~> 1.3.0', :require => false
+  gem 'mocha',          '~> 0.13.1', :require => false
+  gem 'guard-rspec',    '~> 2.3.1',  :require => false
+  gem 'guard-cucumber', '~> 1.2.2',  :require => false
+  gem 'growl',          '~> 1.0.3',  :require => false
+  gem 'rb-fsevent',     '~> 0.9.2',  :require => false
+  gem 'cucumber-rails', '~> 1.3.0',  :require => false
 end
 CODE
 
@@ -117,6 +117,7 @@ create_file 'spec/spec_helper.rb', <<-CODE
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
+require 'mocha/setup'
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
